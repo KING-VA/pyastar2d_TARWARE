@@ -1,6 +1,9 @@
 [![Build Status](https://travis-ci.com/hjweide/pyastar2d.svg?branch=master)](https://travis-ci.com/hjweide/pyastar2d)
 [![Coverage Status](https://coveralls.io/repos/github/hjweide/pyastar2d/badge.svg?branch=master)](https://coveralls.io/github/hjweide/pyastar2d?branch=master)
 [![PyPI version](https://badge.fury.io/py/pyastar2d.svg)](https://badge.fury.io/py/pyastar2d)
+
+Fork of the PyAstar2D library, meant to be used solely in combination with the [TA-RWARE](https://github.com/uoe-agents/task-assignment-robotic-warehouse) environment for warehouse order-picking optimisation research. The for adapts the original A* implementation to weight rotations during the search for the optimal path.
+
 # PyAstar2D
 This is a very simple C++ implementation of the A\* algorithm for pathfinding
 on a two-dimensional grid.  The solver itself is implemented in C++, but is
