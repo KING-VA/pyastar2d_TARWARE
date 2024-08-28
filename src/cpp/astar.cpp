@@ -13,10 +13,11 @@ const float INF = std::numeric_limits<float>::infinity();
 class Node {
   public:
     int idx; // index in the flattened grid
+    int prev_dir; // previous direction
     float cost; // cost of traversing this pixel
     int path_length; // the length of the path to reach this node
 
-    Node(int i, float c, int path_length) : idx(i), cost(c), path_length(path_length) {}
+    Node(int i, int d, float c, int path_length) : idx(i), prev_dir(d), cost(c), path_length(path_length) {}
 };
 
 // the top of the priority queue is the greatest element by default,
@@ -65,7 +66,7 @@ static PyObject *astar(PyObject *self, PyObject *args) {
   int* paths = new int[h * w];
   int path_length = -1;
 
-  Node start_node(start, 0., 1);
+  Node start_node(start, -1, 0., 1);
 
   float* costs = new float[h * w];
   for (int i = 0; i < h * w; ++i)
@@ -112,6 +113,9 @@ static PyObject *astar(PyObject *self, PyObject *args) {
       if (nbrs[i] >= 0) {
         // the sum of the cost so far and the cost of this move
         float new_cost = costs[cur.idx] + weights[nbrs[i]];
+        if (cur.prev_dir > 0 and cur.prev_dir != i and weights[nbrs[i]] < 100) {
+          new_cost += 1;
+        }
         if (new_cost < costs[nbrs[i]]) {
           // estimate the cost to the goal based on legal moves
           // Get the heuristic method to use
@@ -128,10 +132,11 @@ static PyObject *astar(PyObject *self, PyObject *args) {
 
           // paths with lower expected cost are explored first
           float priority = new_cost + heuristic_cost;
-          nodes_to_visit.push(Node(nbrs[i], priority, cur.path_length + 1));
+          nodes_to_visit.push(Node(nbrs[i], i, priority, cur.path_length + 1));
 
           costs[nbrs[i]] = new_cost;
           paths[nbrs[i]] = cur.idx;
+          weights[nbrs[i]] += 100;
         }
       }
     }
