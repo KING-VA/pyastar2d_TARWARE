@@ -30,12 +30,12 @@ bool operator<(const Node &n1, const Node &n2) {
 // http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html#S7
 // L_\inf norm (diagonal distance)
 inline float linf_norm(int i0, int j0, int i1, int j1) {
-  return std::max(std::abs(i0 - i1), std::abs(j0 - j1));
+  return static_cast<float>(std::max(std::abs(i0 - i1), std::abs(j0 - j1)));
 }
 
 // L_1 norm (manhattan distance)
 inline float l1_norm(int i0, int j0, int i1, int j1) {
-  return std::abs(i0 - i1) + std::abs(j0 - j1);
+  return static_cast<float>(std::abs(i0 - i1) + std::abs(j0 - j1));
 }
 
 
@@ -113,7 +113,7 @@ static PyObject *astar(PyObject *self, PyObject *args) {
       if (nbrs[i] >= 0) {
         // the sum of the cost so far and the cost of this move
         float new_cost = costs[cur.idx] + weights[nbrs[i]];
-        if (cur.prev_dir > 0 and cur.prev_dir != i and weights[nbrs[i]] < 100) {
+        if (cur.prev_dir > 0 && cur.prev_dir != i && weights[nbrs[i]] < 100) {
           new_cost += 1;
         }
         if (new_cost < costs[nbrs[i]]) {
